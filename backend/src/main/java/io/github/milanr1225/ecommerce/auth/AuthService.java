@@ -3,6 +3,7 @@ package io.github.milanr1225.ecommerce.auth;
 import io.github.milanr1225.ecommerce.user.Role;
 import io.github.milanr1225.ecommerce.user.User;
 import io.github.milanr1225.ecommerce.user.UserRepository;
+import io.github.milanr1225.ecommerce.user.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +17,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     @Transactional
     public User register(RegisterRequest request) {
@@ -38,5 +40,14 @@ public class AuthService {
         user.setRole(Role.USER);
 
         return userRepository.save(user);
+    }
+
+    public AuthResponse login(LoginRequest request) {
+        User user = userRepository.findByEmail(request.email().trim().toLowerCase())
+                .filter(u -> passwordEncoder.matches(request.password(), u.getPasswordHash()))
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED, "Invalid email or password"));
+
+        return new AuthResponse(jwtService.generateToken(user), UserResponse.from(user));
     }
 }
