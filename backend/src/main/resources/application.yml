@@ -8,6 +8,11 @@ spring:
       ddl-auto: validate
   flyway:
     enabled: true
+  data:
+    web:
+      pageable:
+        default-page-size: 12
+        max-page-size: 50
 
 app:
   jwt:

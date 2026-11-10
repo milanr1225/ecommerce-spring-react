@@ -3,6 +3,8 @@ package io.github.milanr1225.ecommerce.common;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -37,5 +39,10 @@ public class GlobalExceptionHandler {
     private ResponseEntity<ApiError> build(HttpStatus status, String message, Map<String, String> errors) {
         return ResponseEntity.status(status)
                 .body(new ApiError(status.value(), message, errors, Instant.now()));
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ApiError> handleBadSort(PropertyReferenceException ex) {
+        return build(HttpStatus.BAD_REQUEST, "Invalid sort field: " + ex.getPropertyName(), Map.of());
     }
 }
