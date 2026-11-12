@@ -46,3 +46,20 @@ export interface PageResponse<T> {
   totalElements: number
   totalPages: number
 }
+
+export interface CartItem {
+  productId: number
+  slug: string
+  name: string
+  imageUrl: string | null
+  unitPrice: number
+  quantity: number
+  stockQuantity: number
+  lineTotal: number
+}
+
+export interface Cart {
+  items: CartItem[]
+  totalQuantity: number
+  subtotal: number
+}

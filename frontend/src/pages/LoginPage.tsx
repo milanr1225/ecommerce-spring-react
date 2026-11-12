@@ -1,11 +1,13 @@
 import { useState, type FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ApiError } from '../api/client'
 import { useAuth } from '../auth/useAuth'
 
 export default function LoginPage() {
   const { login } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const from = (location.state as { from?: string } | null)?.from ?? '/'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -17,7 +19,7 @@ export default function LoginPage() {
     setSubmitting(true)
     try {
       await login(email, password)
-      navigate('/')
+      navigate(from, { replace: true })
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Could not reach the server')
     } finally {

@@ -1,8 +1,10 @@
 import { Link, Outlet } from 'react-router-dom'
 import { useAuth } from '../auth/useAuth'
+import { useCart } from '../cart/useCart'
 
 export default function Layout() {
   const { user, logout } = useAuth()
+  const { cart } = useCart()
 
   return (
     <>
@@ -13,6 +15,7 @@ export default function Layout() {
         <nav>
           {user ? (
             <>
+              <Link to="/cart">Cart{cart ? ` (${cart.totalQuantity})` : ''}</Link>
               <Link to="/profile">{user.firstName}</Link>
               <button onClick={logout}>Log out</button>
             </>
