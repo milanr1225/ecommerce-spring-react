@@ -16,6 +16,7 @@ export default function Layout() {
           {user ? (
             <>
               <Link to="/cart">Cart{cart ? ` (${cart.totalQuantity})` : ''}</Link>
+              <Link to="/orders">Orders</Link>
               <Link to="/profile">{user.firstName}</Link>
               <button onClick={logout}>Log out</button>
             </>

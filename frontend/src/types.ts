@@ -63,3 +63,34 @@ export interface Cart {
   totalQuantity: number
   subtotal: number
 }
+
+export type OrderStatus = 'PENDING_PAYMENT' | 'PAID' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED'
+
+export interface OrderItem {
+  productId: number
+  name: string
+  unitPrice: number
+  quantity: number
+  lineTotal: number
+}
+
+export interface Order {
+  id: number
+  status: OrderStatus
+  total: number
+  fullName: string
+  address: string
+  city: string
+  postalCode: string
+  country: string
+  createdAt: string
+  items: OrderItem[]
+}
+
+export interface CheckoutData {
+  fullName: string
+  address: string
+  city: string
+  postalCode: string
+  country: string
+}

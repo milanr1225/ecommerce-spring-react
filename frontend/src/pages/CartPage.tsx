@@ -10,6 +10,7 @@ export default function CartPage() {
   if (isError || !cart) return <p role="alert">Could not load the cart.</p>
 
   const busy = update.isPending || remove.isPending
+  const hasStockIssue = cart.items.some((item) => item.quantity > item.stockQuantity)
   const mutationError = update.error ?? remove.error
   const errorMessage =
     mutationError instanceof ApiError ? mutationError.message : mutationError ? 'Something went wrong' : null
@@ -69,9 +70,15 @@ export default function CartPage() {
               Subtotal ({cart.totalQuantity} {cart.totalQuantity === 1 ? 'item' : 'items'}):{' '}
               <strong>{formatPrice(cart.subtotal)}</strong>
             </p>
-            <button disabled title="Coming in the next phase">
-              Checkout
-            </button>
+            {hasStockIssue ? (
+              <button disabled title="Reduce the quantity of items that are low on stock">
+                Checkout
+              </button>
+            ) : (
+              <Link to="/checkout" className="button">
+                Checkout
+              </Link>
+            )}
           </div>
         </>
       )}
